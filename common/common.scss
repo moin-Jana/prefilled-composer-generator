@@ -1,0 +1,19 @@
+.error-adding-recipients-alert {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .d-icon {
+    margin-right: 1em;
+    height: 1.5em;
+    width: 1.5em;
+  }
+}
+
+.copy-link-btn {
+  margin-left: 1em;
+}
+
+.copy-prefilled-composer-link pre code {
+  word-wrap: break-word;
+}

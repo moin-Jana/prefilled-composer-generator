@@ -1,0 +1,13 @@
+{
+  "name": "prefilled composer link generator",
+  "component": true,
+  "authors": "Moin",
+  "about_url": "",
+  "license_url": "https://github.com/moin-Jana/prefilled-composer-generator/blob/main/LICENSE",
+  "learn_more": "",
+  "theme_version": "0.0.1",
+  "minimum_discourse_version": null,
+  "maximum_discourse_version": null,
+  "assets": {},
+  "modifiers": {}
+}

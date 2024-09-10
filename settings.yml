@@ -1,0 +1,4 @@
+show_groups:
+  type: list
+  list_type: compact
+  default: "trust_level_3"
