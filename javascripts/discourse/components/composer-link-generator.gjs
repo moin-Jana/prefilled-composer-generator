@@ -71,7 +71,10 @@ export default class ComposerLinkGenerator extends Component {
     let error;
 
     const groups = recipientsArray.filter(recipient => recipient.type === "group");
-    const users = recipientsArray.filter(recipient => recipient.type === "user");
+    const users = recipientsArray.filter(
+      recipient => recipient.type === "user" || recipient.type === "email"
+    );
+
 
     if (groups.length > 1) {
       error = I18n.t(themePrefix("error.groups"));
