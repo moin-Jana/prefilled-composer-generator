@@ -2,7 +2,7 @@
   "name": "prefilled composer link generator",
   "component": true,
   "authors": "Moin",
-  "about_url": "",
+  "about_url": "https://meta.discourse.org/t/prefilled-composer-link-generator/326460",
   "license_url": "https://github.com/moin-Jana/prefilled-composer-generator/blob/main/LICENSE",
   "learn_more": "",
   "theme_version": "0.0.1",
