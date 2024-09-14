@@ -1,4 +1,6 @@
 show_groups:
   type: list
-  list_type: compact
+  list_type: group
   default: "trust_level_3"
+  description:
+    en: "The user groups that can use this."
