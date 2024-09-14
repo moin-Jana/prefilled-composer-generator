@@ -42,7 +42,7 @@ export default class ComposerLinkModalComponent extends Component {
 		{{#if this.error}}
 		  <div class="alert alert-info error-adding-recipients-alert">
 			{{dIcon "triangle-exclamation"}}
-			<span>{{i18n (themePrefix "error")}}
+			<span>{{this.error}}
 			{{i18n (themePrefix "generated_without")}}</span>
 		  </div>
 		{{/if}}

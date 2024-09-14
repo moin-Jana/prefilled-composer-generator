@@ -6,6 +6,7 @@ import DButton from "discourse/components/d-button";
 import ComposerLinkModalComponent from "../components/modal/composer-link-modal";
 import getURL from "discourse-common/lib/get-url";
 import i18n from "discourse-common/helpers/i18n";
+import I18n from "discourse-i18n";
 
 export default class ComposerLinkGenerator extends Component {
   @service modal;
@@ -73,9 +74,9 @@ export default class ComposerLinkGenerator extends Component {
     const users = recipientsArray.filter(recipient => recipient.type === "user");
 
     if (groups.length > 1) {
-      error = true;
+      error = I18n.t(themePrefix("error.groups"));
     } else if (groups.length === 1 && users.length > 0) {
-      error = true;
+      error = I18n.t(themePrefix("error.mix"));
     } else if (groups.length === 1 && users.length === 0) {
       generatedLink += `&groupname=${encodeURIComponent(this.model.targetRecipients)}`;
     } else if (groups.length === 0 && users.length > 0) {

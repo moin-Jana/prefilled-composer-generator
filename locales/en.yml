@@ -8,5 +8,7 @@ en:
   copy_link: Copy link
   close: Close
   copied_link: Link copied!
-  generated_without: That's why the link below does not include any recipients.
-  error: "You can only generate a link to message either a single group or one or more users, but not both or more than one group."
+  error:
+    groups: "You can only generate a link to message either a single group or one or more users, but not more than one group."
+    mix: "You can only generate a link to message either a single group or one or more users, but not both."
+  generated_without: "That's why the link below does not include any recipients."    
