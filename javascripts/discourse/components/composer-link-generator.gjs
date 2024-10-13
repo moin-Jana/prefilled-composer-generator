@@ -17,7 +17,9 @@ export default class ComposerLinkGenerator extends Component {
   }
 
   get shouldShow() {
-    if (this.model.action === "createTopic" || this.model.action === "privateMessage") {
+    if (this.model.action === "createTopic" || 
+    this.model.action === "privateMessage" || 
+    this.model.editingFirstPost) {
 
       if (this.isUserInShowGroups) {
         return true;
@@ -44,13 +46,13 @@ export default class ComposerLinkGenerator extends Component {
   @action
   generateLink() {
     const prefix = getURL("/");
-    let baseLink = window.location.origin + (prefix === "/" ? "" : prefix);
+    const baseLink = window.location.origin + (prefix === "/" ? "" : prefix);
     let generatedLink = "";
 
-    if (this.model.action === "createTopic") {
-      generatedLink = baseLink + "/new-topic?";
-    } else if (this.model.action === "privateMessage") {
-      generatedLink = baseLink + "/new-message?";
+    if (this.model.privateMessage) {
+     generatedLink = `${baseLink}/new-message?`;
+    } else {
+      generatedLink = `${baseLink}/new-topic?`;
     }
 
     if (this.model.title) {
@@ -62,7 +64,7 @@ export default class ComposerLinkGenerator extends Component {
     if (this.model.categoryId) {
       generatedLink += `&category_id=${encodeURIComponent(this.model.categoryId)}`;
     }
-    if (this.model.tags && this.model.tags.length > 0) {
+    if (this.model.tags?.length) {
       const tagsString = this.model.tags.join(",");
       generatedLink += `&tags=${encodeURIComponent(tagsString)}`;
     }
@@ -74,7 +76,6 @@ export default class ComposerLinkGenerator extends Component {
     const users = recipientsArray.filter(
       recipient => recipient.type === "user" || recipient.type === "email"
     );
-
 
     if (groups.length > 1) {
       error = I18n.t(themePrefix("error.groups"));
@@ -88,8 +89,8 @@ export default class ComposerLinkGenerator extends Component {
 
     this.modal.show(ComposerLinkModalComponent, {
       model: { 
-        generatedLink: generatedLink,
-        error: error,
+        generatedLink,
+        error,
       },
     });
   }
