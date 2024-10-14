@@ -107,7 +107,7 @@ export default class ComposerLinkGenerator extends Component {
     {{#if this.shouldShow}}
       <DButton
         @action={{this.generateLink}}
-        @icon="link"
+        @icon="clone"
         @translatedAriaLabel={{i18n
           (themePrefix "copy_link_prefilled_composer")
         }}
