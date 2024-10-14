@@ -18,7 +18,8 @@ export default class ComposerLinkGenerator extends Component {
   get shouldShow() {
     if (
       this.model.action === "createTopic" ||
-      this.model.action === "privateMessage"
+      this.model.action === "privateMessage" ||
+      this.model.editingFirstPost
     ) {
       if (this.isUserInShowGroups) {
         return true;
@@ -48,10 +49,10 @@ export default class ComposerLinkGenerator extends Component {
     let baseLink = window.location.origin + (prefix === "/" ? "" : prefix);
     let generatedLink = "";
 
-    if (this.model.action === "createTopic") {
-      generatedLink = baseLink + "/new-topic?";
-    } else if (this.model.action === "privateMessage") {
-      generatedLink = baseLink + "/new-message?";
+    if (this.model.privateMessage) {
+      generatedLink = `${baseLink}/new-message?`;
+    } else {
+      generatedLink = `${baseLink}/new-topic?`;
     }
 
     if (this.model.title) {
