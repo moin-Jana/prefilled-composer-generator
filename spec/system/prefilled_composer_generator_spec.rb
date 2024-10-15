@@ -56,14 +56,14 @@ context "when user is in show_groups group" do
       expect(page).to have_no_css(".copy-link-btn")
     end
 
-    it "copy link button does appear when editing first post"
+    it "copy link button does appear when editing first post" do
       visit("/t/#{topic_1.id}")
       find("#post_1 .edit").click
 
       expect(page).to have_css(".copy-link-btn")
     end
 
-    it "copy link button does not appear when editing non-first post"
+    it "copy link button does not appear when editing non-first post" do
       visit("/t/#{topic_1.id}")
       find("#post_2 .edit").click
 
