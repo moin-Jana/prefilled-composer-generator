@@ -3,7 +3,7 @@ RSpec.describe "Prefilled Composer Generator - button test", system: true do
     upload_theme_component
   end
 
-  fab!(:user) { Fabricate(:user, trust_level: TrustLevel[3], refresh_auto_groups: true) }
+  fab!(:user) { Fabricate(:user, trust_level: TrustLevel[1], refresh_auto_groups: true) }
   fab!(:category)
   fab!(:topic_1) { Fabricate(:topic) }
   fab!(:post_1) do
@@ -13,6 +13,14 @@ RSpec.describe "Prefilled Composer Generator - button test", system: true do
       topic: topic_1,
       )
   end
+  fab!(:post_2) do
+    Fabricate(
+      :post,
+      raw: "This is an awesome reply",
+      topic: topic_1,
+      )
+  end
+
 
   before do 
     sign_in(user)
@@ -22,7 +30,7 @@ RSpec.describe "Prefilled Composer Generator - button test", system: true do
     theme.update_setting(:show_groups, "trust_level_4")
     theme.save!
     
-    visit("/c/#{category.id}") # needed?
+    visit("/")
     find("#create-topic").click
 
     expect(page).to have_no_css(".copy-link-btn")
@@ -30,19 +38,12 @@ RSpec.describe "Prefilled Composer Generator - button test", system: true do
 
 context "when user is in show_groups group" do
   before do 
-    theme.update_setting(:show_groups, "trust_level_3")
+    theme.update_setting(:show_groups, "trust_level_1")
     theme.save!
   end
   
-    it "composer has copy link button on home" do    
-      visit("/") # needed?
-      find("#create-topic").click
-
-      expect(page).to have_css(".copy-link-btn")
-    end
-
-     it "composer has copy link button in category" do    
-      visit("/c/#{category.id}") # needed?
+    it "composer has copy link button on new topic" do    
+      visit("/")
       find("#create-topic").click
 
       expect(page).to have_css(".copy-link-btn")
@@ -54,5 +55,37 @@ context "when user is in show_groups group" do
 
       expect(page).to have_no_css(".copy-link-btn")
     end
+
+    it "copy link button does appear when editing first post"
+      visit("/t/#{topic_1.id}")
+      find("#post_1 .edit").click
+
+      expect(page).to have_css(".copy-link-btn")
+    end
+
+    it "copy link button does not appear when editing non-first post"
+      visit("/t/#{topic_1.id}")
+      find("#post_2 .edit").click
+
+      expect(page).to have_no_css(".copy-link-btn")
+    end
+
+    it "composer has copy link button on new message" do    
+      visit("/?new-message")
+
+      expect(page).to have_css(".copy-link-btn")
+    end
+
+    #it "shows education message when sending to more than one group" do
+    #  visit("/?new-message")
+    #  find()
+    #  page.find(".d-modal input.filter").fill_in(with: "jan")
+    #end
+    
+    # clicking clone button shows modal
+    # error when user and group
+    # error when group and group
+    # no error when okay
+    # copy link button works
   end
 end

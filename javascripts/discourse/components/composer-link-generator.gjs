@@ -1,12 +1,11 @@
 import Component from "@glimmer/component";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
-
 import DButton from "discourse/components/d-button";
-import ComposerLinkModalComponent from "../components/modal/composer-link-modal";
-import getURL from "discourse-common/lib/get-url";
 import i18n from "discourse-common/helpers/i18n";
+import getURL from "discourse-common/lib/get-url";
 import I18n from "discourse-i18n";
+import ComposerLinkModalComponent from "../components/modal/composer-link-modal";
 
 export default class ComposerLinkGenerator extends Component {
   @service modal;
@@ -17,10 +16,11 @@ export default class ComposerLinkGenerator extends Component {
   }
 
   get shouldShow() {
-    if (this.model.action === "createTopic" || 
-    this.model.action === "privateMessage" || 
-    this.model.editingFirstPost) {
-
+    if (
+      this.model.action === "createTopic" ||
+      this.model.action === "privateMessage" ||
+      this.model.editingFirstPost
+    ) {
       if (this.isUserInShowGroups) {
         return true;
       }
@@ -30,7 +30,7 @@ export default class ComposerLinkGenerator extends Component {
 
   get isUserInShowGroups() {
     const currentUserGroups = this.currentUser.groups;
-    const groupsArray = settings.show_groups.split('|');
+    const groupsArray = settings.show_groups.split("|");
 
     for (let i = 0; i < currentUserGroups.length; i++) {
       const userGroup = currentUserGroups[i];
@@ -46,11 +46,11 @@ export default class ComposerLinkGenerator extends Component {
   @action
   generateLink() {
     const prefix = getURL("/");
-    const baseLink = window.location.origin + (prefix === "/" ? "" : prefix);
+    let baseLink = window.location.origin + (prefix === "/" ? "" : prefix);
     let generatedLink = "";
 
     if (this.model.privateMessage) {
-     generatedLink = `${baseLink}/new-message?`;
+      generatedLink = `${baseLink}/new-message?`;
     } else {
       generatedLink = `${baseLink}/new-topic?`;
     }
@@ -62,9 +62,11 @@ export default class ComposerLinkGenerator extends Component {
       generatedLink += `&body=${encodeURIComponent(this.model.reply)}`;
     }
     if (this.model.categoryId) {
-      generatedLink += `&category_id=${encodeURIComponent(this.model.categoryId)}`;
+      generatedLink += `&category_id=${encodeURIComponent(
+        this.model.categoryId
+      )}`;
     }
-    if (this.model.tags?.length) {
+    if (this.model.tags && this.model.tags.length > 0) {
       const tagsString = this.model.tags.join(",");
       generatedLink += `&tags=${encodeURIComponent(tagsString)}`;
     }
@@ -72,9 +74,11 @@ export default class ComposerLinkGenerator extends Component {
     const recipientsArray = this.model.targetRecipientsArray;
     let error;
 
-    const groups = recipientsArray.filter(recipient => recipient.type === "group");
+    const groups = recipientsArray.filter(
+      (recipient) => recipient.type === "group"
+    );
     const users = recipientsArray.filter(
-      recipient => recipient.type === "user" || recipient.type === "email"
+      (recipient) => recipient.type === "user" || recipient.type === "email"
     );
 
     if (groups.length > 1) {
@@ -82,13 +86,17 @@ export default class ComposerLinkGenerator extends Component {
     } else if (groups.length === 1 && users.length > 0) {
       error = I18n.t(themePrefix("error.mix"));
     } else if (groups.length === 1 && users.length === 0) {
-      generatedLink += `&groupname=${encodeURIComponent(this.model.targetRecipients)}`;
+      generatedLink += `&groupname=${encodeURIComponent(
+        this.model.targetRecipients
+      )}`;
     } else if (groups.length === 0 && users.length > 0) {
-      generatedLink += `&username=${encodeURIComponent(this.model.targetRecipients)}`;
+      generatedLink += `&username=${encodeURIComponent(
+        this.model.targetRecipients
+      )}`;
     }
 
     this.modal.show(ComposerLinkModalComponent, {
-      model: { 
+      model: {
         generatedLink,
         error,
       },
@@ -96,13 +104,15 @@ export default class ComposerLinkGenerator extends Component {
   }
 
   <template>
-	{{#if this.shouldShow}}
-	  <DButton
-	    @action={{this.generateLink}}
-	    @icon="link"
-	    @translatedAriaLabel={{i18n (themePrefix "copy_link_prefilled_composer")}}
-	    class="btn btn-transparent copy-link-btn"
-	  />
+    {{#if this.shouldShow}}
+      <DButton
+        @action={{this.generateLink}}
+        @icon="clone"
+        @translatedAriaLabel={{i18n
+          (themePrefix "copy_link_prefilled_composer")
+        }}
+        class="btn btn-transparent copy-link-btn"
+      />
     {{/if}}
   </template>
 }
