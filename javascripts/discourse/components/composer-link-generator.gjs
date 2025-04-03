@@ -2,9 +2,9 @@ import Component from "@glimmer/component";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import DButton from "discourse/components/d-button";
-import i18n from "discourse-common/helpers/i18n";
-import getURL from "discourse-common/lib/get-url";
-import I18n from "discourse-i18n";
+import { AUTO_GROUPS } from "discourse/lib/constants";
+import getURL from "discourse/lib/get-url";
+import { i18n } from "discourse-i18n";
 import ComposerLinkModalComponent from "../components/modal/composer-link-modal";
 
 export default class ComposerLinkGenerator extends Component {
@@ -21,16 +21,16 @@ export default class ComposerLinkGenerator extends Component {
       this.model.action === "privateMessage" ||
       this.model.editingFirstPost
     ) {
-      if (this.isUserInShowGroups) {
+      if (this.isUserInShowGroups || this.isUserInShowGroupsDeprecated) {
         return true;
       }
     }
     return false;
   }
 
-  get isUserInShowGroups() {
+  get isUserInShowGroupsDeprecated() {
     const currentUserGroups = this.currentUser.groups;
-    const groupsArray = settings.show_groups.split("|");
+    const groupsArray = settings.show_groups_deprecated.split("|");
 
     for (let i = 0; i < currentUserGroups.length; i++) {
       const userGroup = currentUserGroups[i];
@@ -41,6 +41,19 @@ export default class ComposerLinkGenerator extends Component {
     }
 
     return false;
+  }
+
+  get isUserInShowGroups() {
+    const currentUserGroupIds = this.currentUser.groups.map(
+      (group) => group.id
+    );
+    const allowedGroupIds = settings.show_groups_ids.split("|").map(Number);
+
+    return allowedGroupIds.some(
+      (groupId) =>
+        currentUserGroupIds.includes(groupId) ||
+        groupId === AUTO_GROUPS.everyone.id
+    );
   }
 
   @action
@@ -82,9 +95,9 @@ export default class ComposerLinkGenerator extends Component {
     );
 
     if (groups.length > 1) {
-      error = I18n.t(themePrefix("error.groups"));
+      error = i18n(themePrefix("error.groups"));
     } else if (groups.length === 1 && users.length > 0) {
-      error = I18n.t(themePrefix("error.mix"));
+      error = i18n(themePrefix("error.mix"));
     } else if (groups.length === 1 && users.length === 0) {
       generatedLink += `&groupname=${encodeURIComponent(
         this.model.targetRecipients

@@ -1,4 +1,8 @@
-show_groups:
+show_groups_deprecated:
   type: list
   list_type: compact
-  default: "trust_level_3"
+  default: ""
+show_groups_ids:
+  type: list
+  list_type: group
+  default: "13"
