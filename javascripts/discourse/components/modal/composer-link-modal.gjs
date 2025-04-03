@@ -4,10 +4,9 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import DButton from "discourse/components/d-button";
 import DModal from "discourse/components/d-modal";
+import dIcon from "discourse/helpers/d-icon";
 import { clipboardCopy } from "discourse/lib/utilities";
-import dIcon from "discourse-common/helpers/d-icon";
-import i18n from "discourse-common/helpers/i18n";
-import I18n from "discourse-i18n";
+import { i18n } from "discourse-i18n";
 
 export default class ComposerLinkModalComponent extends Component {
   @service modal;
@@ -27,7 +26,7 @@ export default class ComposerLinkModalComponent extends Component {
     clipboardCopy(link);
     this.toasts.success({
       duration: 1500,
-      data: { message: I18n.t(themePrefix("copied_link")) },
+      data: { message: i18n(themePrefix("copied_link")) },
     });
   }
 
