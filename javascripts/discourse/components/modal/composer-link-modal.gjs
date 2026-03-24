@@ -27,7 +27,7 @@ export default class ComposerLinkModalComponent extends Component {
     clipboardCopy(link);
     this.toasts.success({
       duration: 1500,
-      data: { message: I18n.t(themePrefix("copied_link")) },
+      data: { message: i18n(themePrefix("copied_link")) },
     });
   }
 

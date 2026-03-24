@@ -28,7 +28,7 @@ export default class ComposerLinkGenerator extends Component {
     return false;
   }
 
-  get isUserInShowGroups() {
+  get isUserInShowGroupsDeprecated() {
     const currentUserGroups = this.currentUser.groups;
     const groupsArray = settings.show_groups.split("|");
 
@@ -41,6 +41,19 @@ export default class ComposerLinkGenerator extends Component {
     }
 
     return false;
+  }
+
+  get isUserInShowGroups() {
+    const currentUserGroupIds = this.currentUser.groups.map(
+      (group) => group.id
+    );
+    const allowedGroupIds = settings.restrict_to_groups.split("|").map(Number);
+
+    return allowedGroupIds.some(
+      (groupId) =>
+        currentUserGroupIds.includes(groupId) ||
+        groupId === AUTO_GROUPS.everyone.id
+    );
   }
 
   @action
@@ -82,9 +95,9 @@ export default class ComposerLinkGenerator extends Component {
     );
 
     if (groups.length > 1) {
-      error = I18n.t(themePrefix("error.groups"));
+      error = i18n(themePrefix("error.groups"));
     } else if (groups.length === 1 && users.length > 0) {
-      error = I18n.t(themePrefix("error.mix"));
+      error = i18n(themePrefix("error.mix"));
     } else if (groups.length === 1 && users.length === 0) {
       generatedLink += `&groupname=${encodeURIComponent(
         this.model.targetRecipients
