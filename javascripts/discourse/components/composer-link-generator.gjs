@@ -65,7 +65,13 @@ export default class ComposerLinkGenerator extends Component {
       )}`;
     }
     if (this.model.tags && this.model.tags.length > 0) {
-      const tagsString = this.model.tags.join(",");
+      const tagsString = this.model.tags
+        // Tags were migrated from strings to objects, but I discovered a bug
+        // where it's still a string when you reopen the composer.
+        // The check for string ensures it works in both cases.
+        // Can be removed once fixed. Also helps with backwards compatibility
+        .map((tag) => (typeof tag === "string" ? tag : tag.name))
+        .join(",");
       generatedLink += `&tags=${encodeURIComponent(tagsString)}`;
     }
 
