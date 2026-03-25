@@ -1,7 +1,3 @@
-show_groups_deprecated:
-  type: list
-  list_type: compact
-  default: ""
 restrict_to_groups:
   type: list
   list_type: group

@@ -3,7 +3,6 @@ en:
     description: "Adds a button at the bottom of the editor that generates a link to a prefilled composer, based on the current content"
     settings:
       restrict_to_groups: "Restrict the copy button to members of the selected groups."
-      show_groups_deprecated: "This is the previous version of the group setting. Please remove all groups from here and add them to the new show_groups_ids setting."
   copy_link_prefilled_composer: Copy a link to the prefilled composer
   link_prefilled_composer: Your prefilled composer link
   copy_link: Copy link

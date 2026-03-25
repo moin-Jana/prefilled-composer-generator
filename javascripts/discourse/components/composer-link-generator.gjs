@@ -21,25 +21,10 @@ export default class ComposerLinkGenerator extends Component {
       this.model.action === "privateMessage" ||
       this.model.editingFirstPost
     ) {
-      if (this.isUserInShowGroups || this.isUserInShowGroupsDeprecated) {
+      if (this.isUserInShowGroups) {
         return true;
       }
     }
-    return false;
-  }
-
-  get isUserInShowGroupsDeprecated() {
-    const currentUserGroups = this.currentUser.groups;
-    const groupsArray = settings.show_groups_deprecated.split("|");
-
-    for (let i = 0; i < currentUserGroups.length; i++) {
-      const userGroup = currentUserGroups[i];
-
-      if (groupsArray.includes(userGroup.name)) {
-        return true;
-      }
-    }
-
     return false;
   }
 
