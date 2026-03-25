@@ -1,5 +1,4 @@
 import Component from "@glimmer/component";
-import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import DButton from "discourse/components/d-button";
@@ -9,11 +8,10 @@ import { clipboardCopy } from "discourse/lib/utilities";
 import { i18n } from "discourse-i18n";
 
 export default class ComposerLinkModalComponent extends Component {
-  @service modal;
   @service toasts;
 
-  @tracked generatedLink = this.args.model.generatedLink;
-  @tracked error = this.args.model.error;
+  generatedLink = this.args.model.generatedLink;
+  error = this.args.model.error;
 
   @action
   close() {
