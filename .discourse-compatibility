@@ -5,4 +5,5 @@
 # < core-version: commit-hash of this theme
 #
 # Example:
-# < 2026.2.0-latest: abcde12345
+# 
+< 2026.7.0-latest: 9dcf5933bdd0867e0d0a3c247274d84c3de3f7f8

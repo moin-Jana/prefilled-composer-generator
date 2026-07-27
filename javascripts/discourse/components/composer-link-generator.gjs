@@ -1,11 +1,38 @@
 import Component from "@glimmer/component";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
-import DButton from "discourse/components/d-button";
 import { AUTO_GROUPS } from "discourse/lib/constants";
 import getURL from "discourse/lib/get-url";
+import DButton from "discourse/ui-kit/d-button";
 import { i18n } from "discourse-i18n";
 import ComposerLinkModalComponent from "../components/modal/composer-link-modal";
+
+function shouldRenderForUser(currentUser) {
+  // Using resolve_group_membership on theme settings
+  if (Object.hasOwn(settings, "user_in_restrict_to_groups")) {
+    return settings.user_in_restrict_to_groups;
+  }
+
+  // Backwards compat, remove this once the user_in_X functionality
+  // for theme settings is in core.
+  const allowedGroupIds = settings.restrict_to_groups
+    .split("|")
+    .filter(Boolean)
+    .map(Number);
+
+  if (!currentUser) {
+    return allowedGroupIds.includes(AUTO_GROUPS.anonymous_users.id);
+  }
+
+  const currentUserGroupIds = currentUser.groups.map((group) => group.id);
+
+  return allowedGroupIds.some(
+    (groupId) =>
+      currentUserGroupIds.includes(groupId) ||
+      groupId === AUTO_GROUPS.everyone.id ||
+      groupId === AUTO_GROUPS.logged_in_users.id
+  );
+}
 
 export default class ComposerLinkGenerator extends Component {
   @service modal;
@@ -21,31 +48,16 @@ export default class ComposerLinkGenerator extends Component {
       this.model.action === "privateMessage" ||
       this.model.editingFirstPost
     ) {
-      if (this.isUserInShowGroups) {
-        return true;
-      }
+      return shouldRenderForUser(this.currentUser);
     }
     return false;
-  }
-
-  get isUserInShowGroups() {
-    const currentUserGroupIds = this.currentUser.groups.map(
-      (group) => group.id
-    );
-    const allowedGroupIds = settings.restrict_to_groups.split("|").map(Number);
-
-    return allowedGroupIds.some(
-      (groupId) =>
-        currentUserGroupIds.includes(groupId) ||
-        groupId === AUTO_GROUPS.everyone.id
-    );
   }
 
   @action
   generateLink() {
     const prefix = getURL("/");
     let baseLink = window.location.origin + (prefix === "/" ? "" : prefix);
-    let generatedLink = "";
+    let generatedLink;
 
     if (this.model.privateMessage) {
       generatedLink = `${baseLink}/new-message?`;
