@@ -1,3 +1,5 @@
 import ComposerLinkGenerator from "../../components/composer-link-generator";
 
-<template><ComposerLinkGenerator @model={{@outletArgs.model}} /></template>
+export default <template>
+  <ComposerLinkGenerator @model={{@outletArgs.model}} />
+</template>

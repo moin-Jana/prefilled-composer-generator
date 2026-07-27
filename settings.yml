@@ -1,4 +1,6 @@
 restrict_to_groups:
   type: list
   list_type: group
-  default: "13"
+  default: "13" #TL3
+  disallowed_groups: "0|4" #everyone, anonymous_users
+  resolve_group_membership: true
